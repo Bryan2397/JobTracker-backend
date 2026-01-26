@@ -1,6 +1,6 @@
 package com.job.tracker.dto;
 
-public class LoginRequestDTO {
+public class LoginRequest {
 
     private String email;
 

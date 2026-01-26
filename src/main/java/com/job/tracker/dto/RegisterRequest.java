@@ -1,6 +1,6 @@
 package com.job.tracker.dto;
 
-public class RegisterRequestDTO {
+public class RegisterRequest {
     private String email;
 
     private String password;
