@@ -10,6 +10,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
+    List<Job> myJobs = new ArrayList<>();
+
     @Column(name = "first_name", nullable = true)
     private String firstName;
 
@@ -23,8 +26,19 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+
+
     public User(){
 
+    }
+
+    public void addJob(Job job){
+        myJobs.add(job);
+        job.setUser(this);
+    }
+    public void removeJob(Job job){
+        myJobs.remove(job);
+        job.setUser(null);
     }
 
     public String getFirstName() {
