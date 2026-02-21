@@ -23,11 +23,14 @@ public class AuthService {
         User user = new User();
         user.setEmail(req.getEmail());
         user.setPassword(encoder.encode(req.getPassword()));
+        user.setFirstName(req.getFirstName());
+        user.setLastName(req.getLastName());
 
         userRepository.save(user);
 
         return jwtService.generateToken(user.getEmail());
     }
+
 
     public String login(LoginRequest req){
         User user = userRepository.findByEmail(req.getEmail());

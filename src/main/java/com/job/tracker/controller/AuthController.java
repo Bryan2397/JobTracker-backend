@@ -1,8 +1,8 @@
 package com.job.tracker.controller;
 
-import com.job.tracker.dao.UserRepository;
-import com.job.tracker.entity.User;
-import com.job.tracker.service.UserService;
+import com.job.tracker.dto.LoginRequest;
+import com.job.tracker.dto.RegisterRequest;
+import com.job.tracker.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,21 +14,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final UserService userService;
+    private final AuthService authService;
 
     @Autowired
-    public AuthController(UserService userService){
-        this.userService = userService;
+    public AuthController(AuthService authService){
+        this.authService = authService;
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody User theUser){
-        userService.save(theUser);
-        return "success";
+    public String register(@RequestBody RegisterRequest req){
+        System.out.println(req.getEmail());
+        System.out.println(req.getPassword());
+        if(req.getEmail().trim().isEmpty() || req.getPassword().trim().isEmpty()){
+            return "Please fill all important fields";
+        }
+        return authService.register(req);
     }
 
     @PostMapping("/login")
-    public boolean login(@RequestBody User theUser){
-        return userService.compare(theUser);
+    public String login(@RequestBody LoginRequest req){
+        System.out.println(req.getEmail());
+        System.out.println(req.getPassword());
+
+        return authService.login(req);
     }
+
+
 }
