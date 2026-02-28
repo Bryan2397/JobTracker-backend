@@ -20,6 +20,9 @@ public class AuthService {
     }
 
     public String register(RegisterRequest req){
+        if(userRepository.findByEmail(req.getEmail()) != null){
+            return "User Already Exists";
+        }
         User user = new User();
         user.setEmail(req.getEmail());
         user.setPassword(encoder.encode(req.getPassword()));
@@ -28,7 +31,7 @@ public class AuthService {
 
         userRepository.save(user);
 
-        return jwtService.generateToken(user.getEmail());
+        return jwtService.generateToken(user.getId());
     }
 
 
@@ -42,6 +45,6 @@ public class AuthService {
             throw new RuntimeException("Password doesn't match");
         }
 
-        return jwtService.generateToken(user.getEmail());
+        return jwtService.generateToken(user.getId());
     }
 }

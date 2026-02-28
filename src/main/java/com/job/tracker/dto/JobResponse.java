@@ -6,6 +6,7 @@ public class JobResponse {
     public String title;
     public String company;
     public String jobSummary;
+    public String location;
     public String salary;
     public List<String> skills;
 }

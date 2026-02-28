@@ -20,10 +20,6 @@ public class Job {
     @Column(name = "company")
     private String company;
 
-    @Column(name = "last_status_change")
-    private Date lastStatusChangeAt;
-
-
     @Column(name = "job_url", length = 100)
     private String jobUrl;
 

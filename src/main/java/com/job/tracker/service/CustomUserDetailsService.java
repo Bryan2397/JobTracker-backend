@@ -4,7 +4,6 @@ import com.job.tracker.CustomUserDetails;
 import com.job.tracker.dao.UserRepository;
 import com.job.tracker.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +16,17 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsService{
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public CustomUserDetailsService(UserRepository userRepository){
         this.userRepository = userRepository;
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserById(String id) throws UsernameNotFoundException {
 
-        User theUser = userRepository.findByEmail(email);
+        User theUser = userRepository.findById(Integer.parseInt((id)));
 
         if(theUser == null){
             throw new UsernameNotFoundException("User not found");

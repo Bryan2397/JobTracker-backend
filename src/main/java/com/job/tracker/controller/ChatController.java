@@ -22,13 +22,13 @@ public class ChatController {
         String description = params.get("description");
         System.out.println(description.length());
         String newPrompt = "Extract the following fields from this job description and return ONLY valid JSON, Do not include markdown formatting.\n" +
-                "Do not wrap the JSON in triple backticks.: {" +
+                "Do not wrap the JSON in triple backticks.: {, also add whether the location is remote, onsite, or hybrid in the same field as location." +
                 "title: string;"+
         "company: string;"+
         "jobSummary: string;"+
         "location?: string;"+
                 "salary?: string"+
-                "skills: string[] }"+
+                "skills: string[] these are the languages/frameworks/tools needed }"+
              description;
         return ResponseEntity.ok(chatGPTService.getChatResponse(newPrompt));
     }

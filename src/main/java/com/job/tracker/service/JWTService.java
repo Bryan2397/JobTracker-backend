@@ -1,5 +1,6 @@
 package com.job.tracker.service;
 
+import com.job.tracker.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -35,11 +36,11 @@ public class JWTService {
         this.secretKey = secretKey;
     }
 
-    public String generateToken(String email){
+    public String generateToken(int id){
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(String.valueOf(id))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 5))
+                .setExpiration(new Date(System.currentTimeMillis() + + 86400000))
                 .signWith(getKey())
                 .compact();
     }
@@ -49,7 +50,7 @@ public class JWTService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String extractEmail(String token) {
+    public String extractId(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -64,9 +65,9 @@ public class JWTService {
                 .build().parseClaimsJws(token).getBody();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
-        final String email = extractEmail(token);
-        return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    public boolean validateToken(String token, CustomUserDetails customUserDetails) {
+        final int id = Integer.parseInt(extractId(token));
+        return (id == customUserDetails.getUserId() && !isTokenExpired(token));
     }
 
     private boolean isTokenExpired(String token) {

@@ -23,8 +23,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(@RequestBody RegisterRequest req){
-        System.out.println(req.getEmail());
-        System.out.println(req.getPassword());
         if(req.getEmail().trim().isEmpty() || req.getPassword().trim().isEmpty()){
             return "Please fill all important fields";
         }

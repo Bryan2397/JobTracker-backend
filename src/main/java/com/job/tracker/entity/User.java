@@ -11,7 +11,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
     List<Job> myJobs = new ArrayList<>();
@@ -24,7 +24,6 @@ public class User {
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;
-
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -67,11 +66,11 @@ public class User {
         this.password = password;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

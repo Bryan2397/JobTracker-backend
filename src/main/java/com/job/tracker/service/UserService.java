@@ -3,6 +3,7 @@ package com.job.tracker.service;
 import com.job.tracker.dao.UserRepository;
 import com.job.tracker.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,10 @@ public class UserService {
     @Autowired
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
+    }
+
+    public User getUser(Authentication authentication){
+        return userRepository.findByEmail(authentication.getName());
     }
 
 

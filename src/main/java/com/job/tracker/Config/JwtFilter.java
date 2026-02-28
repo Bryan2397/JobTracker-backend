@@ -1,5 +1,6 @@
 package com.job.tracker.Config;
 
+import com.job.tracker.CustomUserDetails;
 import com.job.tracker.service.CustomUserDetailsService;
 import com.job.tracker.service.JWTService;
 import jakarta.servlet.FilterChain;
@@ -33,23 +34,33 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
         String token = null;
-        String email = null;
+        String id = null;
 
         if(authHeader != null && authHeader.startsWith("Bearer ")){
             token = authHeader.substring(7);
-            email = jwtService.extractEmail(token);
+            id = jwtService.extractId(token);
         }
 
-        if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails userDetails = context.getBean(CustomUserDetailsService.class).loadUserByUsername(email);
 
-            if(jwtService.validateToken(token, userDetails)){
+        if(id != null && SecurityContextHolder.getContext().getAuthentication() == null){
+            CustomUserDetails customUserDetails = customUserDetailsService.loadUserById(id);
+
+            if(jwtService.validateToken(token, customUserDetails)){
+
+                // Create an authentication object with the user's authorities (roles)
                 UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
+
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                // Set the authenticated user into the SecurityContext
+                // This marks the request as authenticated for the rest of the filter chain
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
+
+        // Continue the filter chain (very important!)
+        // Without this, the request would stop here
         filterChain.doFilter(request, response);
     }
 }
