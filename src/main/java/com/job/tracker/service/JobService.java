@@ -3,6 +3,7 @@ package com.job.tracker.service;
 import com.job.tracker.CustomUserDetails;
 import com.job.tracker.dao.JobRepository;
 import com.job.tracker.dao.UserRepository;
+import com.job.tracker.dto.DeleteJobIds;
 import com.job.tracker.entity.Job;
 import com.job.tracker.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +48,26 @@ public class JobService {
         if(user == null){
             return new ArrayList<>();
         }
+
         List<Job> myJobs = jobRepository.findByUser_Id(user.getId());
         for(Job j : myJobs){
             j.setUser(null);
         }
 
         return myJobs;
+    }
+
+    public void deleteJobs(DeleteJobIds jobs, Authentication authentication){
+        CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
+
+        User user = userRepository.findById(currentUser.getUserId());
+        if(user == null){
+            return;
+        }
+
+        List<Integer> ids = jobs.getJob_ids();
+        for(int id : ids){
+            jobRepository.deleteById(id);
+        }
     }
 }
