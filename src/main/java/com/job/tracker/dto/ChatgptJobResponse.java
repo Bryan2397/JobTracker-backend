@@ -2,7 +2,7 @@ package com.job.tracker.dto;
 
 import java.util.List;
 
-public class JobResponse {
+public class ChatgptJobResponse {
     public String title;
     public String company;
     public String jobSummary;

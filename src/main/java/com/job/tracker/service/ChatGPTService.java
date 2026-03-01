@@ -1,7 +1,7 @@
 package com.job.tracker.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.job.tracker.dto.JobResponse;
+import com.job.tracker.dto.ChatgptJobResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class ChatGPTService {
         this.webClient = webClientBuilder.build();
     }
 
-    public JobResponse getChatResponse(String description) throws JsonProcessingException {
+    public ChatgptJobResponse getChatResponse(String description) throws JsonProcessingException {
         String sanitized = santizeForJson(description);
 
         Map<String, Object> requestBody = new HashMap<>();
@@ -55,7 +55,7 @@ public class ChatGPTService {
                 .path("content")
                 .asText();
 
-        JobResponse job = mapper.readValue(aiResponse, JobResponse.class);
+        ChatgptJobResponse job = mapper.readValue(aiResponse, ChatgptJobResponse.class);
         return job;
     }
 

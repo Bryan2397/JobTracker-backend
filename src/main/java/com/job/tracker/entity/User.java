@@ -11,7 +11,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
     List<Job> myJobs = new ArrayList<>();
@@ -31,15 +31,6 @@ public class User {
 
     public User(){
 
-    }
-
-    public void addJob(Job job){
-        myJobs.add(job);
-        job.setUser(this);
-    }
-    public void removeJob(Job job){
-        myJobs.remove(job);
-        job.setUser(null);
     }
 
     public String getFirstName() {
@@ -81,6 +72,4 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
-
 }

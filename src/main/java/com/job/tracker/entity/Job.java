@@ -2,33 +2,55 @@ package com.job.tracker.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "jobs")
 public class Job {
-    public enum Status { APPLIED, OA, PHONE, TECHNICAL, OFFER, REJECTED }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private Status status = Status.APPLIED;
+    private String status;
 
     @Column(name = "company")
     private String company;
 
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "notes", nullable = true)
+    private String note;
+
+    @Column(name = "location", nullable = true)
+    private String location;
+
+    @Column(name = "job_Summary")
+    private String jobSummary;
+
+    @Column(name = "salary", nullable = true)
+    private String salary;
+
     @Column(name = "job_url", length = 100)
     private String jobUrl;
 
+    @Column(name = "date_applied")
+    private LocalDate dateApplied;
 
-    @Column(name = "added_on")
-    private Date addedOn;
+    @Column(name = "date_responded", nullable = true)
+    private LocalDate dateResponded;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "job_skills", joinColumns = @JoinColumn(name = "job_id"))
+    @Column(name = "skill")
+    private List<String> skills = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     public User getUser() {
@@ -38,4 +60,102 @@ public class Job {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getJobSummary() {
+        return jobSummary;
+    }
+
+    public void setJobSummary(String jobSummary) {
+        this.jobSummary = jobSummary;
+    }
+
+    public String getSalary() {
+        return salary;
+    }
+
+    public void setSalary(String salary) {
+        this.salary = salary;
+    }
+
+    public String getJobUrl() {
+        return jobUrl;
+    }
+
+    public void setJobUrl(String jobUrl) {
+        this.jobUrl = jobUrl;
+    }
+
+    public LocalDate getDateApplied() {
+        return dateApplied;
+    }
+
+    public void setDateApplied(LocalDate dateApplied) {
+        this.dateApplied = dateApplied;
+    }
+
+    public LocalDate getDateResponded() {
+        return dateResponded;
+    }
+
+    public void setDateResponded(LocalDate dateResponded) {
+        this.dateResponded = dateResponded;
+    }
+
+    public List<String> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<String> skills) {
+        this.skills = skills;
+    }
+
+
 }
