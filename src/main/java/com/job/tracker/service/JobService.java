@@ -70,4 +70,35 @@ public class JobService {
             jobRepository.deleteById(id);
         }
     }
+
+    public void updateJob(int id, Job job, Authentication authentication){
+        CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
+
+        User user = userRepository.findById(currentUser.getUserId());
+        if(user == null){
+            return;
+        }
+        Job existingJob = jobRepository.findById(id).orElse(null);
+        if(existingJob == null){
+            return;
+        }
+        if(existingJob.getUser().getId() != user.getId()){
+            throw new RuntimeException("Error updating");
+        }
+
+
+        existingJob.setStatus(job.getStatus());
+        existingJob.setCompany(job.getCompany());
+        existingJob.setTitle(job.getTitle());
+        existingJob.setNote(job.getNote());
+        existingJob.setLocation(job.getLocation());
+        existingJob.setJobSummary(job.getJobSummary());
+        existingJob.setSalary(job.getSalary());
+        existingJob.setJobUrl(job.getJobUrl());
+        existingJob.setDateApplied(job.getDateApplied());
+        existingJob.setDateResponded(job.getDateResponded());
+        existingJob.setSkills(job.getSkills());
+
+        jobRepository.save(existingJob);
+    }
 }

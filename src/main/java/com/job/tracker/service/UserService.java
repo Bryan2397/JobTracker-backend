@@ -4,7 +4,6 @@ import com.job.tracker.dao.UserRepository;
 import com.job.tracker.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -38,4 +38,9 @@ public class JobController {
     public void deleteJobs(@RequestBody DeleteJobIds jobs, Authentication authentication){
         jobService.deleteJobs(jobs, authentication);
     }
+
+    @PutMapping("/{id}")
+    public void updateJob(@PathVariable Integer id, @RequestBody Job job, Authentication authentication){
+        jobService.updateJob(id, job, authentication);
+    }
 }
