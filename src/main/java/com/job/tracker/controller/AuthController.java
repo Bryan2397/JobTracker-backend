@@ -31,9 +31,9 @@ public class AuthController {
 
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest req){
-        System.out.println(req.getEmail());
-        System.out.println(req.getPassword());
-
+        if(req.getEmail().trim().isEmpty() || req.getPassword().trim().isEmpty()){
+            return "Please fill all important fields";
+        }
         return authService.login(req);
     }
 

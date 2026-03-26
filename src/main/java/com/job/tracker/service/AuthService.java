@@ -38,11 +38,11 @@ public class AuthService {
     public String login(LoginRequest req){
         User user = userRepository.findByEmail(req.getEmail());
         if(user == null){
-            throw new RuntimeException("User doesn't exist");
+            throw new RuntimeException("Error");
         }
 
         if(!encoder.matches(req.getPassword(), user.getPassword())){
-            throw new RuntimeException("Password doesn't match");
+            throw new RuntimeException("Error");
         }
 
         return jwtService.generateToken(user.getId());
