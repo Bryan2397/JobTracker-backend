@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -25,7 +23,7 @@ public class JobController {
 
 
     @PostMapping("/save")
-    public String saveJob(@RequestBody Job job, Authentication authentication){
+    public ResponseEntity<String> saveJob(@RequestBody Job job, Authentication authentication){
         return jobService.saveJob(job, authentication);
     }
 
@@ -37,6 +35,16 @@ public class JobController {
     @DeleteMapping("/delete")
     public void deleteJobs(@RequestBody DeleteJobIds jobs, Authentication authentication){
         jobService.deleteJobs(jobs, authentication);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteJob(@PathVariable Integer id, Authentication authentication){
+        jobService.deleteJob(id, authentication);
+    }
+
+    @GetMapping("/{id}")
+    public Job getJob(@PathVariable Integer id, Authentication authentication){
+        return jobService.getJobById(id, authentication);
     }
 
     @PutMapping("/{id}")

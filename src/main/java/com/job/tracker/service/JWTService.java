@@ -40,7 +40,7 @@ public class JWTService {
         return Jwts.builder()
                 .setSubject(String.valueOf(id))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + + 86400000))
+                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000L))
                 .signWith(getKey())
                 .compact();
     }

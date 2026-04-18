@@ -7,9 +7,11 @@ import com.job.tracker.dto.DeleteJobIds;
 import com.job.tracker.entity.Job;
 import com.job.tracker.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,20 +27,20 @@ public class JobService {
         this.userRepository = userRepository;
     }
 
-    public String saveJob(Job job, Authentication authentication){
+    public ResponseEntity<String> saveJob(Job job, Authentication authentication){
 
         CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
 
         User user = userRepository.findById(currentUser.getUserId());
         if(user == null){
-            return "User doesn't exist";
+            return ResponseEntity.ok("User doesn't exist");
         }
 
         job.setUser(user);
-
+        job.setDateAdded(LocalDate.now());
         jobRepository.save(job);
 
-        return "Successful";
+        return ResponseEntity.ok("Successful");
     }
 
     public List<Job> getJobs(Authentication authentication){
@@ -50,11 +52,31 @@ public class JobService {
         }
 
         List<Job> myJobs = jobRepository.findByUser_Id(user.getId());
-        for(Job j : myJobs){
-            j.setUser(null);
+        for(Job job : myJobs){
+            job.setUser(null);
         }
 
         return myJobs;
+    }
+
+    public Job getJobById(int id, Authentication authentication){
+        CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
+
+        User user = userRepository.findById(currentUser.getUserId());
+        if(user == null){
+            return null;
+        }
+        return jobRepository.findById(id).get();
+    }
+
+    public void deleteJob(int id, Authentication authentication){
+        CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
+
+        User user = userRepository.findById(currentUser.getUserId());
+        if(user == null){
+            return;
+        }
+        jobRepository.deleteById(id);
     }
 
     public void deleteJobs(DeleteJobIds jobs, Authentication authentication){
@@ -70,6 +92,8 @@ public class JobService {
             jobRepository.deleteById(id);
         }
     }
+
+
 
     public void updateJob(int id, Job job, Authentication authentication){
         CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
@@ -96,7 +120,6 @@ public class JobService {
         existingJob.setSalary(job.getSalary());
         existingJob.setJobUrl(job.getJobUrl());
         existingJob.setDateApplied(job.getDateApplied());
-        existingJob.setDateResponded(job.getDateResponded());
         existingJob.setSkills(job.getSkills());
 
         jobRepository.save(existingJob);

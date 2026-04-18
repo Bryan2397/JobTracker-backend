@@ -2,6 +2,8 @@ package com.job.tracker.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +30,30 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "ai_usage_counter")
+    private int aiUsage;
+
+    @Column(name = "ai_usage_reset_time")
+    private LocalDateTime aiResetDate;
 
     public User(){
 
+    }
+
+    public LocalDateTime getAiResetDate() {
+        return aiResetDate;
+    }
+
+    public int getAiUsage() {
+        return aiUsage;
+    }
+
+    public void setAiUsage(int aiUsage) {
+        this.aiUsage = aiUsage;
+    }
+
+    public void setAiResetDate(LocalDateTime aiResetDate) {
+        this.aiResetDate = aiResetDate;
     }
 
     public String getFirstName() {

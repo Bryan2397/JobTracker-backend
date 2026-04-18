@@ -41,8 +41,8 @@ public class Job {
     @Column(name = "date_applied")
     private LocalDate dateApplied;
 
-    @Column(name = "date_responded", nullable = true)
-    private LocalDate dateResponded;
+    @Column(name = "date_added")
+    private LocalDate dateAdded;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "job_skills", joinColumns = @JoinColumn(name = "job_id"))
@@ -141,14 +141,6 @@ public class Job {
         this.dateApplied = dateApplied;
     }
 
-    public LocalDate getDateResponded() {
-        return dateResponded;
-    }
-
-    public void setDateResponded(LocalDate dateResponded) {
-        this.dateResponded = dateResponded;
-    }
-
     public List<String> getSkills() {
         return skills;
     }
@@ -157,5 +149,11 @@ public class Job {
         this.skills = skills;
     }
 
+    public LocalDate getDateAdded() {
+        return dateAdded;
+    }
 
+    public void setDateAdded(LocalDate dateAdded) {
+        this.dateAdded = dateAdded;
+    }
 }
