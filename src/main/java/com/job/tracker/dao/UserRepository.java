@@ -29,9 +29,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("UPDATE User u SET u.aiResetDate = NOW() WHERE u.id = :id")
     int setAiWaitTime(@Param("id") Integer id);
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE User u SET u.aiResetDate = NULL WHERE u.id = :id")
-    int clearAiWaitTime(@Param("id") Integer id);
-
 }
