@@ -31,7 +31,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/h2-console/**",
+                                "https://jobtracker-backend-aodg.onrender.com",
                                 "/api/auth/register",
                                 "/api/auth/login",
                                 "/api/auth/**"
