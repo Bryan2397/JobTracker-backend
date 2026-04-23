@@ -38,7 +38,7 @@ public class UserService {
         CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
 
         User user = userRepository.findById(currentUser.getUserId());
-        if(user == null){
+        if(user == null || user.getAiResetDate() == null){
             return;
         }
         if (user.getAiUsage() == 0 && user.getAiResetDate().plusMinutes(1).isBefore(LocalDateTime.now())) {
