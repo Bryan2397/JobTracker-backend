@@ -21,6 +21,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ApiError> handleNotFound(EntityNotFoundException ex){
+        System.out.println(ex.getMessage());
+
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ApiError(403, ex.getMessage()));
@@ -28,6 +30,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiError> handleAccessDenied(AccessDeniedException ex){
+        System.out.println(ex.getMessage());
+
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(new ApiError(404, "Access denied"));
@@ -35,6 +39,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiError> handleBadCredentials(BadCredentialsException ex){
+        System.out.println(ex.getMessage());
+
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(new ApiError(401, ex.getMessage()));
@@ -42,6 +48,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneric(Exception ex){
+        System.out.println(ex.getMessage());
+
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ApiError(500, ex.getMessage()));
