@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
@@ -45,10 +46,14 @@ public class ChatController {
                 "salary?: string"+
                 "skills: string[] these are the languages/frameworks/tools needed }, reject anything you feel isnt a job description with a few words of the failure"+
              description;
-        userRepository.decrementAiUsage(user.getId());
+
+        user.setAiUsage(user.getAiUsage() - 1);
+        userRepository.save(user);
+
         User user1 = userRepository.findById(user.getId());
         if(user1.getAiUsage() == 0){
-            userRepository.setAiWaitTime(user.getId());
+            user1.setAiResetDate(LocalDateTime.now());
+            userRepository.save(user1);
         }
         return ResponseEntity.ok(chatGPTService.getChatResponse(newPrompt));
     }

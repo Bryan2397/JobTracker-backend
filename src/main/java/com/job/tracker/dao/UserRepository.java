@@ -13,20 +13,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     User findById(int id);
     User findByEmail(String email);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE User u SET u.aiUsage = u.aiUsage - 1 WHERE u.id = :id")
-    int decrementAiUsage(@Param("id") Integer id);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE User u SET u.aiUsage = 5, u.aiResetDate = NULL WHERE u.id = :id")
-    int resetAiUsage(@Param("id") Integer id);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE User u SET u.aiResetDate = NOW() WHERE u.id = :id")
-    int setAiWaitTime(@Param("id") Integer id);
-
 }
