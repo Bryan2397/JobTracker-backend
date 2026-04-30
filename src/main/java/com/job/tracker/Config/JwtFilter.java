@@ -3,6 +3,7 @@ package com.job.tracker.Config;
 import com.job.tracker.CustomUserDetails;
 import com.job.tracker.service.CustomUserDetailsService;
 import com.job.tracker.service.JWTService;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,34 +36,52 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
         String authHeader = request.getHeader("Authorization");
-        String token = null;
-        String id = null;
 
-        if(authHeader != null && authHeader.startsWith("Bearer ")){
-            token = authHeader.substring(7);
-            id = jwtService.extractId(token);
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
+        String token = authHeader.substring(7);
 
-        if(id != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            CustomUserDetails customUserDetails = customUserDetailsService.loadUserById(id);
+        try {
+            Claims claims = jwtService.extractAllClaimsSafe(token);
 
-            if(jwtService.validateToken(token, customUserDetails)){
-
-                // Create an authentication object with the user's authorities (roles)
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
-
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                // Set the authenticated user into the SecurityContext
-                // This marks the request as authenticated for the rest of the filter chain
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+            if (claims == null) {
+                filterChain.doFilter(request, response);
+                return;
             }
+
+            String id = claims.getSubject();
+
+            if (id != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+                CustomUserDetails user =
+                        customUserDetailsService.loadUserById(id);
+
+                if (jwtService.validateToken(token, user)) {
+
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(
+                                    user,
+                                    null,
+                                    user.getAuthorities()
+                            );
+
+                    authToken.setDetails(
+                            new WebAuthenticationDetailsSource()
+                                    .buildDetails(request)
+                    );
+
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("JWT ERROR: " + e.getMessage());
+            // Do NOT crash request
         }
 
-        // Continue the filter chain (very important!)
-        // Without this, the request would stop here
         filterChain.doFilter(request, response);
     }
 }

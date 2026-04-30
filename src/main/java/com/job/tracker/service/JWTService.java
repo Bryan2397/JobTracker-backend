@@ -2,6 +2,7 @@ package com.job.tracker.service;
 
 import com.job.tracker.CustomUserDetails;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
 import java.util.function.Function;
@@ -46,8 +48,7 @@ public class JWTService {
     }
 
     public SecretKey getKey(){
-        byte[] keyBytes = Base64.getUrlDecoder().decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
+        return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
     public String extractId(String token) {
@@ -57,6 +58,18 @@ public class JWTService {
     private <T> T extractClaim(String token, Function<Claims, T> claimResolver){
         final Claims claims = extractAllClaims(token);
         return claimResolver.apply(claims);
+    }
+
+    public Claims extractAllClaimsSafe(String token){
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(getKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (JwtException | IllegalArgumentException e) {
+            return null;
+        }
     }
 
     private Claims extractAllClaims(String token){
