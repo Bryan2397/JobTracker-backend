@@ -28,7 +28,7 @@ public class AuthService {
         user.setPassword(encoder.encode(req.getPassword()));
         user.setFirstName(req.getFirstName());
         user.setLastName(req.getLastName());
-        user.setAiUsage(5);
+        user.setAiUsage(10);
 
         userRepository.save(user);
 
