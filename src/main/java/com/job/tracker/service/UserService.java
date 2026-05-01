@@ -41,9 +41,9 @@ public class UserService {
         if(user == null || user.getAiResetDate() == null){
             return;
         }
-        if (user.getAiUsage() == 0 && user.getAiResetDate().plusMinutes(5).isBefore(LocalDateTime.now())) {
+        if (user.getAiUsage() == 0 && user.getAiResetDate().plusHours(24).isBefore(LocalDateTime.now())) {
             user.setAiResetDate(null);
-            user.setAiUsage(5);
+            user.setAiUsage(10);
             userRepository.save(user);
         }
     }
