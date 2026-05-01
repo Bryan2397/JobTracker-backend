@@ -17,25 +17,25 @@ public class Job {
     @Column(name = "status", nullable = false)
     private String status;
 
-    @Column(name = "company")
+    @Column(name = "company", columnDefinition = "TEXT")
     private String company;
 
     @Column(name = "title")
     private String title;
 
-    @Column(name = "notes", nullable = true)
+    @Column(name = "notes", nullable = true, columnDefinition = "TEXT")
     private String note;
 
     @Column(name = "location", nullable = true)
     private String location;
 
-    @Column(name = "job_Summary")
+    @Column(name = "job_Summary", columnDefinition = "TEXT")
     private String jobSummary;
 
     @Column(name = "salary", nullable = true)
     private String salary;
 
-    @Column(name = "job_url", length = 100)
+    @Column(name = "job_url", columnDefinition = "TEXT")
     private String jobUrl;
 
     @Column(name = "date_applied")
