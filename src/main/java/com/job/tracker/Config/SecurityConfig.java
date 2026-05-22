@@ -54,7 +54,8 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
-                "https://jobtracker-ddj179yl8-bryan2397s-projects.vercel.app"
+                "https://jobtracker-ddj179yl8-bryan2397s-projects.vercel.app",
+                "https://jobtracker-flame.vercel.app"
         ));
 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
